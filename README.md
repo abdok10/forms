@@ -4,6 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Preview:
 ![Screen 1 Preview](public/images/preview1.png "Homepage Screenshot")
+<!-- <img src="public/images/preview1.png" alt="Homepage Preview" width="700" /> -->
 ![Screen 2 Preview](public/images/preview2.png "Homepage Screenshot")
 
 ## Tech Stack:
@@ -23,8 +24,9 @@ To install and run the project locally:
 2. Install the dependencies:
   ```bash
   npm install
+  ```
 
-4. Run the development server:
+3. Run the development server:
 ```bash
 npm run dev
 # or
@@ -35,7 +37,7 @@ pnpm dev
 bun dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
 
