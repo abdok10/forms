@@ -1,101 +1,143 @@
-import Image from "next/image";
+"use client"
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { TalkToSalesAction } from "@/actions/actions";
+import { SubmitButton } from "@/components/SubmitButton";
+
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { submissionSchema } from "@/lib/zodSchemas";
+import { useFormState } from "react-dom";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [lastResult, action] = useFormState(TalkToSalesAction, undefined);
+  const [form, salesFields] = useForm({
+    lastResult,
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: submissionSchema });
+    },
+
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
+  return (
+    <section className="min-h-screen w-screen flex flex-col items-center justify-center">
+      <h1 className="text-4xl font-semibold mb-2">Contact Us</h1>
+      <Card className="max-w-[500px] w-full">
+        <Tabs defaultValue="sales">
+          <CardContent className="mt-5">
+            <TabsList className="grid grid-cols-2 mb-4">
+              <TabsTrigger value="sales" tabIndex={0}>
+                Talk to Sales
+              </TabsTrigger>
+              <TabsTrigger value="support" tabIndex={0}>
+                Support Ticket
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="sales">
+              <p className="text-muted-foreground text-sm">
+                You want to integrate your product with us? We can help you.
+                Please contact us down below.
+              </p>
+              <form
+                id={form.id}
+                onSubmit={form.onSubmit}
+                action={action}
+                className="flex flex-col gap-y-4 mt-5"
+                noValidate
+              >
+                <input type="hidden" name="_gotcha" />
+                <div className="space-y-1">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    key={salesFields.name.key}
+                    name={salesFields.name.name}
+                    defaultValue={salesFields.name.initialValue}
+                    placeholder="John Doe"
+                  />
+                  <p className="text-red-500 text-sm">
+                    {salesFields.name.errors}
+                  </p>
+                </div>
+                <div className="space-y-1 flex flex-col">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    key={salesFields.email.key}
+                    name={salesFields.email.name}
+                    defaultValue={salesFields.email.initialValue}
+                    placeholder="john.doe@example.com"
+                  />
+                  <p className="text-red-500 text-sm">
+                    {salesFields.email.errors}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="message">Question or Comment</Label>
+                  <Textarea
+                    key={salesFields.message.key}
+                    name={salesFields.message.name}
+                    defaultValue={salesFields.message.initialValue}
+                    placeholder="Pleae share some details about your needs..."
+                    className="h-32"
+                  />
+                  <p className="text-red-500 text-sm">
+                    {salesFields.message.errors}
+                  </p>
+                </div>
+
+                <SubmitButton />
+              </form>
+            </TabsContent>
+
+            <TabsContent value="support">
+              <p className="text-muted-foreground text-sm">
+                Troubleshoot a technical issue or payment problem.
+              </p>
+              <form className="flex flex-col gap-y-4 mt-5">
+                <input type="hidden" name="_gotcha" />
+                <div className="space-y-1">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" placeholder="John Doe" />
+                  <p className="text-red-500 text-sm">
+                    {/* {supportFields.name.errors} */}
+                  </p>
+                </div>
+                <div className="space-y-1 flex flex-col">
+                  <Label htmlFor="email">Account Email</Label>
+                  <Input id="email" placeholder="John.Doe@example.com" />
+                  <p className="text-red-500 text-sm">
+                    {/* {supportFields.email.errors} */}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="problem">Problem</Label>
+                  <Textarea
+                    placeholder="Something is wrong..."
+                    className="h-32"
+                  />
+                  <p className="text-red-500 text-sm">
+                    {/* {supportFields.message.errors} */}
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="problem">Asset</Label>
+                  <Input type="file" id="image" />
+                </div>
+
+                <SubmitButton />
+              </form>
+            </TabsContent>
+          </CardContent>
+        </Tabs>
+      </Card>
+    </section>
   );
 }
