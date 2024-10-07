@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TalkToSalesAction } from "@/actions/actions";
+import { TalkToSalesAction, SupportTicketAction } from "@/actions/actions";
 import { SubmitButton } from "@/components/SubmitButton";
 
 import { useForm } from "@conform-to/react";
@@ -14,9 +14,24 @@ import { submissionSchema } from "@/lib/zodSchemas";
 import { useFormState } from "react-dom";
 
 export default function Home() {
-  const [lastResult, action] = useFormState(TalkToSalesAction, undefined);
-  const [form, salesFields] = useForm({
-    lastResult,
+  const [salesResult, salesAction] = useFormState(TalkToSalesAction, undefined);
+  const [supportResult, supportAction] = useFormState(
+    SupportTicketAction,
+    undefined
+  );
+  const [salesForm, salesFields] = useForm({
+    lastResult: salesResult,
+
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: submissionSchema });
+    },
+
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
+  });
+
+  const [supportForm, supportFields] = useForm({
+    lastResult: supportResult,
 
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: submissionSchema });
@@ -46,9 +61,9 @@ export default function Home() {
                 Please contact us down below.
               </p>
               <form
-                id={form.id}
-                onSubmit={form.onSubmit}
-                action={action}
+                id={salesForm.id}
+                onSubmit={salesForm.onSubmit}
+                action={salesAction}
                 className="flex flex-col gap-y-4 mt-5"
                 noValidate
               >
@@ -101,35 +116,65 @@ export default function Home() {
               <p className="text-muted-foreground text-sm">
                 Troubleshoot a technical issue or payment problem.
               </p>
-              <form className="flex flex-col gap-y-4 mt-5">
+              <form
+                id={supportForm.id}
+                onSubmit={supportForm.onSubmit}
+                action={supportAction}
+                className="flex flex-col gap-y-4 mt-5"
+                noValidate
+              >
                 <input type="hidden" name="_gotcha" />
                 <div className="space-y-1">
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="John Doe" />
+                  <Input
+                    id="name"
+                    key={supportFields.name.key}
+                    name={supportFields.name.name}
+                    defaultValue={supportFields.name.initialValue}
+                    placeholder="John Doe"
+                  />
                   <p className="text-red-500 text-sm">
-                    {/* {supportFields.name.errors} */}
+                    {supportFields.name.errors}
                   </p>
                 </div>
                 <div className="space-y-1 flex flex-col">
                   <Label htmlFor="email">Account Email</Label>
-                  <Input id="email" placeholder="John.Doe@example.com" />
+                  <Input
+                    id="email"
+                    key={supportFields.email.key}
+                    name={supportFields.email.name}
+                    defaultValue={supportFields.email.initialValue}
+                    placeholder="John.Doe@example.com"
+                  />
                   <p className="text-red-500 text-sm">
-                    {/* {supportFields.email.errors} */}
+                    {supportFields.email.errors}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="problem">Problem</Label>
+                  <Label htmlFor="message">Problem</Label>
                   <Textarea
+                    id="message"
+                    key={supportFields.message.key}
+                    name={supportFields.message.name}
+                    defaultValue={supportFields.message.initialValue}
                     placeholder="Something is wrong..."
                     className="h-32"
                   />
                   <p className="text-red-500 text-sm">
-                    {/* {supportFields.message.errors} */}
+                    {supportFields.message.errors}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="problem">Asset</Label>
-                  <Input type="file" id="image" />
+                  <Label htmlFor="image">Asset</Label>
+                  <Input
+                    type="file"
+                    id="image"
+                    key={supportFields.image.key}
+                    name={supportFields.image.name}
+                  />
+                  <p className="text-red-500 text-sm">
+                    {supportFields.image.errors}
+                  </p>
                 </div>
 
                 <SubmitButton />
