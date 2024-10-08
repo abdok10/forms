@@ -3,9 +3,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Preview:
-![Screen 1 Preview](public/images/preview1.png "Homepage Screenshot")
+![Screen 1 Preview](public/images/screen1.png "Screen 1 Preview")
 <!-- <img src="public/images/preview1.png" alt="Homepage Preview" width="700" /> -->
-![Screen 2 Preview](public/images/preview2.png "Homepage Screenshot")
+![Screen 2 Preview](public/images/screen2.png "Screen 2 Preview")
+![getForm Preview](public/images/screen3.png "getForm Preview")
 
 ## Tech Stack:
 

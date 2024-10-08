@@ -41,8 +41,8 @@ export default function Home() {
     shouldRevalidate: "onInput",
   });
   return (
-    <section className="min-h-screen w-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-semibold mb-2">Contact Us</h1>
+    <section className="min-h-screen w-screen flex flex-col items-center justify-center bg-gradient-to-l from-[#946263] to-[#676394]">
+      <h1 className="text-[40px] font-semibold mb-2 text-white">Contact Us</h1>
       <Card className="max-w-[500px] w-full">
         <Tabs defaultValue="sales">
           <CardContent className="mt-5">
@@ -69,7 +69,7 @@ export default function Home() {
               >
                 <input type="hidden" name="_gotcha" />
                 <div className="space-y-1">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name" className>Name</Label>
                   <Input
                     id="name"
                     key={salesFields.name.key}
@@ -120,7 +120,7 @@ export default function Home() {
                 id={supportForm.id}
                 onSubmit={supportForm.onSubmit}
                 action={supportAction}
-                className="flex flex-col gap-y-4 mt-5"
+                className="flex flex-col gap-y-2 mt-5"
                 noValidate
               >
                 <input type="hidden" name="_gotcha" />

@@ -13,7 +13,7 @@ export function SubmitButton() {
           <Loader2 className="size-4 mr-2 animate-spin" /> Submitting...
         </Button>
       ) : (
-        <Button type="submit">Submit Message</Button>
+        <Button type="submit" className="font-semibold bg-gradient-to-r from-[#946263] to-[#676394]">Submit Message</Button>
       )}
     </>
   );
